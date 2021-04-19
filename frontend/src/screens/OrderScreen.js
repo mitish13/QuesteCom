@@ -77,12 +77,17 @@ const OrderScreen = ({ match, history }) => {
   }, [dispatch, orderId, successPay, successDeliver, order]);
 
   const successPaymentHandler = (paymentResult) => {
-    console.log(paymentResult);
+    console.log("success button scene " + paymentResult);
     dispatch(payOrder(orderId, paymentResult));
   };
 
   const deliverHandler = () => {
     dispatch(deliverOrder(order));
+  };
+
+  //cod
+  const confirmOrder = () => {
+    console.log("yet to implement");
   };
 
   return loading ? (
@@ -195,18 +200,29 @@ const OrderScreen = ({ match, history }) => {
                   <Col>₹{order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
-                <ListGroup.Item>
-                  {loadingPay && <Loader />}
-                  {!sdkReady ? (
-                    <Loader />
-                  ) : (
-                    <PayPalButton
-                      amount={Math.round(order.totalPrice / 60)}
-                      onSuccess={successPaymentHandler}
-                    />
-                  )}
-                </ListGroup.Item>
+              {order.paymentMethod === "COD" ? (
+                <Button
+                  onClick={() => confirmOrder("COD")}
+                  className="btn-block"
+                  type="button"
+                >
+                  Confirm Order
+                </Button>
+              ) : (
+                order.paymentMethod === "PayPal" &&
+                !order.isPaid && (
+                  <ListGroup.Item>
+                    {loadingPay && <Loader />}
+                    {!sdkReady ? (
+                      <Loader />
+                    ) : (
+                      <PayPalButton
+                        amount={Math.round(order.totalPrice / 60)}
+                        onSuccess={successPaymentHandler}
+                      />
+                    )}
+                  </ListGroup.Item>
+                )
               )}
               {loadingDeliver && <Loader />}
               {userInfo &&

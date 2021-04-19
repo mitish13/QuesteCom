@@ -13,11 +13,13 @@ const PaymentScreen = ({ history }) => {
     history.push("/shipping");
   }
 
-  const [paymentMethod, setPaymentMethod] = useState("PayPal");
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
+    console.log(paymentMethod);
+
     e.preventDefault();
     dispatch(savePaymentMethod(paymentMethod));
     history.push("/placeorder");
@@ -37,7 +39,6 @@ const PaymentScreen = ({ history }) => {
               id="PayPal"
               name="paymentMethod"
               value="PayPal"
-              checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
             <Form.Check
